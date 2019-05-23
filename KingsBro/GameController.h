@@ -9,8 +9,8 @@ class GameController
 		std::string name;
 		sf::Color color;
 		bool demesne[29];
-		int from;
-		int to;
+		int from = -1;
+		int to = -1;
 	};
 private:
 	Terrain map[29];
