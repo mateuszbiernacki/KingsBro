@@ -37,32 +37,9 @@ int main()
 
 		}
 		
-		/*
-		sf::Vector2i position;
-		position = sf::Mouse::getPosition(window);
-		while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			if ((sf::Mouse::isButtonPressed(sf::Mouse::Left)) &&
-				(position.x >= 100 && position.x <= 150) &&
-				(position.y >= 435 && position.y <= 465)) {
-				if (!isSelected) {
-					teren.select(3);
-				}
-				else {
-					teren.deselect();
-				}
-				wasChange = true;
-			}
-		}
-		if (wasChange) {
-			isSelected = !isSelected;
-			wasChange = false;
-		}
-		*/
 
 		gameController.play(window);
 		gameController.draw(window);
-
-		//window.draw(teren.getRect());
 		window.display();
 	
 	}

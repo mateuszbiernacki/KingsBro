@@ -105,14 +105,74 @@ void GameController::draw(sf::RenderWindow &window) {
 	}
 
 void GameController::play(sf::RenderWindow & window) {
-		sf::Vector2i position;
-		position = sf::Mouse::getPosition(window);
-		while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			for (int i = 0; i < 29; i++) {
-				if ((sf::Mouse::isButtonPressed(sf::Mouse::Left)) &&
-					(position.x >= map[i].getRect().getPosition().x && position.x <= (map[i].getRect().getPosition().x + 50)) &&
-					(position.y >= map[i].getRect().getPosition().y && position.y <= (map[i].getRect().getPosition().y + 20))) {
-					
+
+
+
+	bool shouldClear = false;
+	//zaprowadzic tury i podzial na graczy
+	if (this->from == -1 && this->to == -1) {
+		this->from = this->select(window);
+		if (this->from != -1) std::cout << "from: " << this->from << '\n';
+
+		if (this->from != -1) {
+			for (int j = 0; j < 29; j++) {
+				if (map[this->from].getAttackable()[j]) {
+					map[j].select(2);
+				}
+				else {
+					map[j].deselect();
+				}
+				map[this->from].select(3);
+
+			}
+
+		}
+
+	}
+	if (this->from != -1 && this->to == -1) {
+		
+		
+
+		while (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			int buff = this->select(window);
+			if (buff >= 0) {
+				for (int i = 0; i < 29; i++) {
+					if (map[this->from].getAttackable()[i] && buff == i) {
+						this->to = buff;
+					}
+				}
+			}
+		}
+
+
+		if (this->to != -1 && this->from != -1) {
+			std::cout << "to: " << this->to << '\n';
+
+			this->clear(window);
+			this->from = this->to = -1;
+
+		}
+	}
+
+
+
+
+}
+
+int GameController::select(sf::RenderWindow & window)
+{
+	sf::Vector2i position;
+	position = sf::Mouse::getPosition(window);
+	while (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		for (int i = 0; i < 29; i++) {
+			if ((sf::Mouse::isButtonPressed(sf::Mouse::Left)) &&
+				(position.x >= map[i].getRect().getPosition().x && position.x <= (map[i].getRect().getPosition().x + 50)) &&
+				(position.y >= map[i].getRect().getPosition().y && position.y <= (map[i].getRect().getPosition().y + 20))) {
+				/*
+				if (a == -1) {
+					a = i;
+					std::cout << "a: " << i << '\n';
 					for (int j = 0; j < 29; j++) {
 						if (map[i].getAttackable()[j]) {
 							map[j].select(2);
@@ -121,9 +181,21 @@ void GameController::play(sf::RenderWindow & window) {
 							map[j].deselect();
 						}
 						map[i].select(3);
+
 					}
-				}
+
+				}*/
+
+				return i;
 			}
 		}
-	
+	}
+	return -1;
+}
+
+void GameController::clear(sf::RenderWindow & window)
+{
+	for (int i = 0; i < 29; i++) {
+		map[i].deselect();
+	}
 }
