@@ -107,12 +107,16 @@ void GameController::draw(sf::RenderWindow &window) {
 void GameController::play(sf::RenderWindow & window) {
 
 
-
-	bool shouldClear = false;
-	//zaprowadzic tury i podzial na graczy
 	if (this->from == -1 && this->to == -1) {
-		this->from = this->select(window);
-		if (this->from != -1) std::cout << "from: " << this->from << '\n';
+
+
+		int buff = this->select(window);
+		if (buff != -1) {
+			if (this->map[buff].getRect().getOutlineColor() == this->tour) {
+				this->from = buff;
+				std::cout << "from: " << this->from << std::endl;
+			}
+		}
 
 		if (this->from != -1) {
 			for (int j = 0; j < 29; j++) {
@@ -149,8 +153,22 @@ void GameController::play(sf::RenderWindow & window) {
 		if (this->to != -1 && this->from != -1) {
 			std::cout << "to: " << this->to << '\n';
 
-			this->clear(window);
+
+			//tutaj akcje
+
+
+
+
+
+
+
+
+
+
+			this->clear();
 			this->from = this->to = -1;
+			if (tour == sf::Color::Blue) tour = sf::Color::Red;
+			else if (tour == sf::Color::Red) tour = sf::Color::Blue;
 
 		}
 	}
@@ -169,23 +187,6 @@ int GameController::select(sf::RenderWindow & window)
 			if ((sf::Mouse::isButtonPressed(sf::Mouse::Left)) &&
 				(position.x >= map[i].getRect().getPosition().x && position.x <= (map[i].getRect().getPosition().x + 50)) &&
 				(position.y >= map[i].getRect().getPosition().y && position.y <= (map[i].getRect().getPosition().y + 20))) {
-				/*
-				if (a == -1) {
-					a = i;
-					std::cout << "a: " << i << '\n';
-					for (int j = 0; j < 29; j++) {
-						if (map[i].getAttackable()[j]) {
-							map[j].select(2);
-						}
-						else {
-							map[j].deselect();
-						}
-						map[i].select(3);
-
-					}
-
-				}*/
-
 				return i;
 			}
 		}
@@ -193,7 +194,7 @@ int GameController::select(sf::RenderWindow & window)
 	return -1;
 }
 
-void GameController::clear(sf::RenderWindow & window)
+void GameController::clear()
 {
 	for (int i = 0; i < 29; i++) {
 		map[i].deselect();

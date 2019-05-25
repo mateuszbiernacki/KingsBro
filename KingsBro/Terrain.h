@@ -24,6 +24,7 @@ public:
 	int getForce();
 	bool* getAttackable();
 	int getPOD();
+	
 
 };
 

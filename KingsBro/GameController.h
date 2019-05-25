@@ -17,6 +17,7 @@ private:
 	Player p2;
 	int from = -1;
 	int to = -1;
+	sf::Color tour = sf::Color::Blue;
 public:
 	GameController();
 	~GameController();
@@ -24,6 +25,7 @@ public:
 	void draw(sf::RenderWindow &window);
 	void play(sf::RenderWindow &window);
 	int select(sf::RenderWindow &window);
-	void clear(sf::RenderWindow &window); 
+	void clear(); 
+
 };
 
