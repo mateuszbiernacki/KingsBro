@@ -83,3 +83,8 @@ int Terrain::getPOD()
 	return this->POD;
 }
 
+void Terrain::setColor(sf::Color c)
+{
+	this->rect.setOutlineColor(c);
+}
+

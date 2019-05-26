@@ -99,6 +99,61 @@ void GameController::draw(sf::RenderWindow &window) {
 		window.draw(text);
 	}
 
+	auto strArmy = std::to_string(this->army);
+	sf::Text sArmy;
+
+	sArmy.setString(strArmy);
+	sArmy.setFont(font);
+	sArmy.setCharacterSize(30);
+	sArmy.setFillColor(sf::Color::Green);
+	sArmy.setPosition(1291, 670);
+	window.draw(sArmy);
+
+	sf::RectangleShape arrL;
+	arrL.setSize(sf::Vector2f(51, 31));
+	arrL.setPosition(1220, 674);
+	sf::Texture arrLPict;
+	if (!arrLPict.loadFromFile("ArrowL.png")) {
+		std::cout << "error: arrowL not found\n";
+	}
+	arrL.setTexture(&arrLPict);
+	window.draw(arrL);
+
+
+	sf::RectangleShape arrR;
+	arrR.setSize(sf::Vector2f(51, 31));
+	arrR.setPosition(1380, 674);
+	sf::Texture arrRPict;
+	if (!arrRPict.loadFromFile("ArrowR.png")) {
+		std::cout << "error: arrowR not found\n";
+	}
+	arrR.setTexture(&arrRPict);
+	window.draw(arrR);
+
+	
+	if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Keyboard::isKeyPressed(sf::Keyboard::A))) &&
+		sf::Mouse::getPosition(window).x > arrL.getPosition().x &&
+		sf::Mouse::getPosition(window).x < arrL.getPosition().x + arrL.getSize().x &&
+		sf::Mouse::getPosition(window).y > arrL.getPosition().y &&
+		sf::Mouse::getPosition(window).y < arrL.getPosition().y + arrL.getSize().y) {
+		if (army > 100) {
+			this->army -= 100;
+		}
+		window.draw(sArmy);
+	}
+
+	if ((sf::Mouse::isButtonPressed(sf::Mouse::Left) || (sf::Keyboard::isKeyPressed(sf::Keyboard::D))) &&
+		sf::Mouse::getPosition(window).x > arrR.getPosition().x &&
+		sf::Mouse::getPosition(window).x < arrR.getPosition().x + arrR.getSize().x &&
+		sf::Mouse::getPosition(window).y > arrR.getPosition().y &&
+		sf::Mouse::getPosition(window).y < arrR.getPosition().y + arrR.getSize().y) {
+		if (army < 10000) {
+			this->army += 100;
+		}
+		window.draw(sArmy);
+	}
+	
+	
 
 
 
@@ -154,21 +209,30 @@ void GameController::play(sf::RenderWindow & window) {
 			std::cout << "to: " << this->to << '\n';
 
 
-			//tutaj akcje
-
-
-
-
-
-
-
-
+			if (this->map[this->from].getRect().getOutlineColor() != this->map[this->to].getRect().getOutlineColor()) {
+				this->attack(this->map[this->from].getRect().getOutlineColor());
+			}
+			else {
+				this->move();
+			}
 
 
 			this->clear();
 			this->from = this->to = -1;
-			if (tour == sf::Color::Blue) tour = sf::Color::Red;
-			else if (tour == sf::Color::Red) tour = sf::Color::Blue;
+
+			if (++tourCount == 5) {
+				if (tour == sf::Color::Blue) tour = sf::Color::Red;
+				else if (tour == sf::Color::Red) tour = sf::Color::Blue;
+				tourCount = 0;
+
+				for (int i = 0; i < 29; i++) {
+					this->map[i].setForce(this->map[i].getForce() + this->map[i].getPolulace());
+				}
+
+			}
+
+
+			
 
 		}
 	}
@@ -200,3 +264,44 @@ void GameController::clear()
 		map[i].deselect();
 	}
 }
+
+void GameController::attack(sf::Color attackColor)
+{
+	int att;
+	int deff = this->map[this->to].getForce();
+	int deffPow = deff * 100;
+	int attPow;
+	if (this->army < this->map[this->from].getForce()) {
+		att = this->army;
+		attPow = att * (100 - this->map[this->to].getPOD());
+		this->map[this->from].setForce(this->map[this->from].getForce() - att);
+	}
+	else {
+		att = this->map[this->from].getForce();
+		attPow = att * (100 - this->map[this->to].getPOD());
+		this->map[this->from].setForce(0);
+	}
+
+	if (attPow > deffPow) {
+		this->map[this->to].setColor(attackColor);
+		this->map[this->to].setForce((attPow - deffPow) / 100);
+	}
+	else {
+		this->map[this->to].setForce((deffPow - attPow)/100);
+	}
+
+
+}
+
+void GameController::move()
+{
+	if (this->army < this->map[this->from].getForce()) {
+		this->map[this->from].setForce(this->map[this->from].getForce() - this->army);
+		this->map[this->to].setForce(this->map[this->to].getForce() + army);
+	}
+	else {
+		this->map[this->to].setForce(this->map[this->to].getForce() + this->map[this->from].getForce());
+		this->map[this->from].setForce(0);
+	}
+}
+

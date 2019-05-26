@@ -18,6 +18,8 @@ private:
 	int from = -1;
 	int to = -1;
 	sf::Color tour = sf::Color::Blue;
+	int army = 1000;//armia z suwaka
+	int tourCount = 2;
 public:
 	GameController();
 	~GameController();
@@ -26,6 +28,7 @@ public:
 	void play(sf::RenderWindow &window);
 	int select(sf::RenderWindow &window);
 	void clear(); 
-
+	void attack(sf::Color attackColor);
+	void move();
 };
 

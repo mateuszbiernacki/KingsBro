@@ -24,7 +24,7 @@ public:
 	int getForce();
 	bool* getAttackable();
 	int getPOD();
-	
+	void setColor(sf::Color c);
 
 };
 
