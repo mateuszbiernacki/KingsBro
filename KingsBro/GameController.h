@@ -8,7 +8,6 @@ class GameController
 	public:
 		std::string name;
 		sf::Color color;
-		bool demesne[29];
 
 	};
 private:
@@ -20,6 +19,7 @@ private:
 	sf::Color tour = sf::Color::Blue;
 	int army = 1000;//armia z suwaka
 	int tourCount = 2;
+	bool gameOver = false;
 public:
 	GameController();
 	~GameController();
@@ -30,5 +30,7 @@ public:
 	void clear(); 
 	void attack(sf::Color attackColor);
 	void move();
+	bool getIsGameOver();
+	void reset();
 };
 

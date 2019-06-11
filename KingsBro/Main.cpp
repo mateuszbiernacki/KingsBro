@@ -16,14 +16,7 @@ int main()
 	sprite.setTextureRect(sf::IntRect(0,0,1600,800)); 
 
 
-	int tab[3];
-	tab[0] = 1;
-	tab[1] = 3;
-	tab[2] = 4;
-	Wilderness teren(100, 435, 300, tab, 3, sf::Color::Blue);
 
-	bool isSelected = false;
-	bool wasChange = false;
 	while (window.isOpen())
 	{
 		window.draw(sprite);
